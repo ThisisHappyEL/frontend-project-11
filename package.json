@@ -1,0 +1,42 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "RSS agregator project by ThisisHappy",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "NODE_ENV=production npx webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThisisHappyEL/frontend-project-11.git"
+  },
+  "author": "ThisisHappy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThisisHappyEL/frontend-project-11/issues"
+  },
+  "homepage": "https://github.com/ThisisHappyEL/frontend-project-11#readme",
+  "devDependencies": {
+    "axios": "^1.7.9",
+    "css-loader": "^7.1.2",
+    "eslint": "^8.40.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "html-webpack-plugin": "^5.6.3",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "i18next": "^24.2.2",
+    "lodash": "^4.17.21",
+    "on-change": "^5.0.1",
+    "yup": "^1.6.1"
+  }
+}

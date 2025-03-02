@@ -1,5 +1,7 @@
 export default {
   translation: {
+    feeds: 'Feeds',
+    posts: 'Posts',
     succesfully: 'RSS loaded successfully',
     view: 'View',
     errors: {
@@ -8,6 +10,7 @@ export default {
       oldUrl: 'RSS already exists',
       notIncludeRSS: 'The resource does not contain a valid RSS',
       networkError: 'Network error',
+      unknown: 'Unknown error',
     },
   },
 };

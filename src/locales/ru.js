@@ -1,5 +1,7 @@
 export default {
   translation: {
+    feeds: 'Фиды',
+    posts: 'Посты',
     succesfully: 'RSS успешно загружен',
     view: 'Просмотр',
     errors: {
@@ -8,6 +10,7 @@ export default {
       oldUrl: 'RSS уже существует',
       notIncludeRSS: 'Ресурс не содержит валидный RSS',
       networkError: 'Ошибка сети',
+      unknown: 'Неизвестная ошибка',
     },
   },
 };

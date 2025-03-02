@@ -7,6 +7,8 @@ import locale from './locales/yupLocales.js';
 import watcher from './watchers.js';
 import parse from './rss.js';
 
+const fetchingTimeout = 5000;
+
 const addProxy = (url) => {
   const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app');
   urlWithProxy.searchParams.set('url', url);
@@ -23,6 +25,52 @@ const getLoadingProcessError = (error) => {
   }
   return 'unknown';
 };
+
+const fetchNewPosts = (watchedState) => {
+  Promise.all(watchedState.currentFeeds.map((feed) => {
+    const proxyUrl = addProxy(feed.url);
+    return axios.get(proxyUrl)
+      .then((response) => {
+        const feedData = parse(response.data.contents);
+        const newPosts = feedData.news.map((item) => ({ ...item, channelId: feed.id }));
+        const oldPosts = watchedState.posts.filter((post) => post.channelId === feed.id);
+        const posts = _.differenceWith(
+          newPosts,
+          oldPosts,
+          (p1, p2) => p1.itemTitle === p2.itemTitle,
+        )
+          .map((post) => ({ ...post, id: _.uniqueId() }));
+        watchedState.posts.unshift(...posts);
+      })
+      .catch((er) => {
+        console.log(er);
+      });
+  }))
+    .finally(() => {
+      setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
+    });
+};
+
+// const fetchNewPosts = (watchedState) => {
+//   const promises = watchedState.currentFeeds.map((feed) => {
+//     const urlWithProxy = addProxy(feed.url);
+//     return axios.get(urlWithProxy)
+//       .then((response) => {
+//         const feedData = parse(response.data.contents);
+//         const newPosts = feedData.news.map((item) => ({ ...item, channelId: feed.id }));
+//         const oldPosts = watchedState.posts.filter((post) => post.channelId === feed.id);
+//         const posts = _.differenceWith(newPosts, oldPosts, (p1, p2) => p1.itemTitle === p2.itemTitle)
+//           .map((post) => ({ ...post, id: _.uniqueId() }));
+//         watchedState.posts.unshift(...posts);
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       });
+//   });
+//   Promise.all(promises).finally(() => {
+//     setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
+//   });
+// };
 
 const loadRss = (watchedState, url) => {
   const { loadingProcess } = watchedState;
@@ -110,6 +158,8 @@ const app = () => {
             }
           });
       });
+
+      setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
     });
 
   return promise;

@@ -152,7 +152,7 @@ export default (state, elements, i18n) => {
     articleFull.href = viewsPosts.itemLink;
   };
 
-  const watchedState = onChange(state, (path, value) => {
+  const watchedState = onChange(state, (path) => {
     switch (path) {
       case 'urlForm':
         errorForm();

@@ -2,7 +2,7 @@ const parse = (data) => {
   const parser = new DOMParser();
   const rssDOM = parser.parseFromString(data, 'text/xml');
 
-  const parseError = rssDOM.querySelector('parseerror');
+  const parseError = rssDOM.querySelector('parsererror');
   if (parseError) {
     const error = new Error(parseError.textContent);
     error.isParsingError = true;

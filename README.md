@@ -33,7 +33,7 @@ CI/CD:
 ## Установка и использование
 
 ```bash
-git clone git@github.com:nbagr/frontend-project-11.git - Клонирование репозитория локально
+git clone git@github.com:ThisisHappyEL/frontend-project-11.git - Клонирование репозитория локально
 make install - Установка зависимостей
 make develop - Запуск локального сервера
 

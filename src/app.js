@@ -69,6 +69,7 @@ const loadRss = (watchedState, url) => {
       loadingProcess.status = 'idle';
     })
     .catch((er) => {
+      console.log(`Ошибка сети или ресурс не содержит rss - ${er}`);
       loadingProcess.error = getLoadingProcessError(er);
       loadingProcess.status = 'failed';
     });

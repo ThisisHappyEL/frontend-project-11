@@ -7,7 +7,7 @@ import locale from './locales/yupLocales.js';
 import watcher from './watchers.js';
 import parse from './rss.js';
 
-const fetchingTimeout = 5000;
+const fetchingIntervalTime = 5000;
 
 const addProxy = (url) => {
   const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app');
@@ -32,45 +32,24 @@ const fetchNewPosts = (watchedState) => {
     return axios.get(proxyUrl)
       .then((response) => {
         const feedData = parse(response.data.contents);
-        const newPosts = feedData.news.map((item) => ({ ...item, channelId: feed.id }));
-        const oldPosts = watchedState.posts.filter((post) => post.channelId === feed.id);
+        const allPosts = feedData.news.map((item) => ({ ...item, channelId: feed.id }));
+        const previousPosts = watchedState.posts.filter((post) => post.channelId === feed.id);
         const posts = _.differenceWith(
-          newPosts,
-          oldPosts,
+          allPosts,
+          previousPosts,
           (p1, p2) => p1.itemTitle === p2.itemTitle,
         )
           .map((post) => ({ ...post, id: _.uniqueId() }));
         watchedState.posts.unshift(...posts);
       })
       .catch((er) => {
-        console.log(er);
+        console.log(`Не удалось добавить новый пост ${er}`);
       });
   }))
     .finally(() => {
-      setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
+      setTimeout(() => fetchNewPosts(watchedState), fetchingIntervalTime);
     });
 };
-
-// const fetchNewPosts = (watchedState) => {
-//   const promises = watchedState.currentFeeds.map((feed) => {
-//     const urlWithProxy = addProxy(feed.url);
-//     return axios.get(urlWithProxy)
-//       .then((response) => {
-//         const feedData = parse(response.data.contents);
-//         const newPosts = feedData.news.map((item) => ({ ...item, channelId: feed.id }));
-//         const oldPosts = watchedState.posts.filter((post) => post.channelId === feed.id);
-//         const posts = _.differenceWith(newPosts, oldPosts, (p1, p2) => p1.itemTitle === p2.itemTitle)
-//           .map((post) => ({ ...post, id: _.uniqueId() }));
-//         watchedState.posts.unshift(...posts);
-//       })
-//       .catch((e) => {
-//         console.error(e);
-//       });
-//   });
-//   Promise.all(promises).finally(() => {
-//     setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
-//   });
-// };
 
 const loadRss = (watchedState, url) => {
   const { loadingProcess } = watchedState;
@@ -103,6 +82,7 @@ const app = () => {
     submit: document.querySelector('button[type="submit"]'),
     feedsMain: document.querySelector('.feeds'),
     postsMain: document.querySelector('.posts'),
+    modalWindow: document.querySelector('#modal'),
   };
 
   const state = {
@@ -116,6 +96,12 @@ const app = () => {
     urlForm: {
       stateError: null,
       urlValid: false,
+    },
+    modalState: {
+      postId: null,
+    },
+    interfaceState: {
+      seenPosts: new Set(),
     },
   };
 
@@ -156,11 +142,22 @@ const app = () => {
               };
               loadRss(watchedState, url);
             }
-          });
+          })
+          .catch((er) => console.log(`Проблема с валидацией - ${er}`));
       });
 
-      setTimeout(() => fetchNewPosts(watchedState), fetchingTimeout);
-    });
+      elements.postsMain.addEventListener('click', (clickZone) => {
+        if ('id' in clickZone.target.dataset) {
+          const { id } = clickZone.target.dataset;
+          watchedState.modalState.postId = String(id);
+          watchedState.interfaceState.seenPosts.add(id);
+        }
+        return 'none clicable';
+      });
+
+      setTimeout(() => fetchNewPosts(watchedState), fetchingIntervalTime);
+    })
+    .catch((er) => console.log(`Ошибка на уровне создания локалей валидации - ${er}`));
 
   return promise;
 };

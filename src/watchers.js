@@ -89,6 +89,7 @@ export default (state, elements, i18n) => {
   };
 
   const handlePosts = () => {
+    const { posts, interfaceState } = state;
     const { postsMain } = elements;
 
     const postsBlock = document.createElement('div');
@@ -107,13 +108,14 @@ export default (state, elements, i18n) => {
     postsList.classList.add('list-group', 'border-0', 'rounded-0');
     postsBlock.appendChild(postsList);
 
-    const posts = state.posts.map((post) => {
+    const everyPosts = posts.map((post) => {
       const listElement = document.createElement('li');
       listElement.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
       const link = document.createElement('a');
-      link.href = post.url;
-      link.classList.add('fw-bold');
+      link.href = post.itemLink;
+      const classes = interfaceState.seenPosts.has(post.id) ? ['fw-normal', 'link-secondary'] : ['fw-bold'];
+      link.classList.add(...classes);
       link.dataset.id = post.id;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
@@ -130,10 +132,24 @@ export default (state, elements, i18n) => {
       listElement.append(link, button);
       return listElement;
     });
-    postsList.append(...posts);
+    postsList.append(...everyPosts);
 
     postsMain.innerHTML = '';
     postsMain.appendChild(postsBlock);
+  };
+
+  const handleModal = () => {
+    const { posts, modalState } = state;
+    const { modalWindow } = elements;
+
+    const viewsPosts = posts.find(({ id }) => id === modalState.postId);
+    const title = modalWindow.querySelector('.modal-title');
+    const body = modalWindow.querySelector('.modal-body');
+    const articleFull = modalWindow.querySelector('.full-article');
+
+    title.textContent = viewsPosts.itemTitle;
+    body.textContent = viewsPosts.itemDescription;
+    articleFull.href = viewsPosts.itemLink;
   };
 
   const watchedState = onChange(state, (path, value) => {
@@ -148,6 +164,12 @@ export default (state, elements, i18n) => {
         handleFeeds();
         break;
       case 'posts':
+        handlePosts();
+        break;
+      case 'modalState.postId':
+        handleModal();
+        break;
+      case 'interfaceState.seenPost':
         handlePosts();
         break;
       default:

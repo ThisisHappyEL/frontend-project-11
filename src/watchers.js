@@ -179,7 +179,7 @@ export default (state, elements, i18n) => {
       case 'modalState.postId':
         handleModal();
         break;
-      case 'interfaceState.seenPost':
+      case 'interfaceState.seenPosts':
         handlePosts();
         break;
       default:

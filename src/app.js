@@ -9,6 +9,16 @@ import parse from './rss.js';
 
 const fetchingIntervalTime = 5000;
 
+const elements = {
+  form: document.querySelector('.rss-form'),
+  feedbackInscription: document.querySelector('.text-danger'),
+  input: document.querySelector('#url-input'),
+  submit: document.querySelector('button[type="submit"]'),
+  feedsMain: document.querySelector('.feeds'),
+  postsMain: document.querySelector('.posts'),
+  modalWindow: document.querySelector('#modal'),
+};
+
 const addProxy = (url) => {
   const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app');
   urlWithProxy.searchParams.set('url', url);
@@ -76,16 +86,6 @@ const loadRss = (watchedState, url) => {
 };
 
 const app = () => {
-  const elements = {
-    form: document.querySelector('.rss-form'),
-    feedbackInscription: document.querySelector('.text-danger'),
-    input: document.querySelector('#url-input'),
-    submit: document.querySelector('button[type="submit"]'),
-    feedsMain: document.querySelector('.feeds'),
-    postsMain: document.querySelector('.posts'),
-    modalWindow: document.querySelector('#modal'),
-  };
-
   const state = {
     lng: 'ru',
     currentFeeds: [],

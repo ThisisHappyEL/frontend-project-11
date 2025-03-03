@@ -47,25 +47,9 @@ export default (state, elements, i18n) => {
     }
   };
 
-  const handleFeeds = () => {
-    const { currentFeeds } = state;
-    const { feedsMain } = elements;
-
-    const feedsBlock = document.createElement('div');
-    feedsBlock.classList.add('card', 'border-0');
-
-    const feedsInscriptionBlock = document.createElement('div');
-    feedsInscriptionBlock.classList.add('card-body');
-    feedsBlock.appendChild(feedsInscriptionBlock);
-
-    const feedInscription = document.createElement('h2');
-    feedInscription.classList.add('card-title', 'h4');
-    feedInscription.textContent = i18n.t('feeds');
-    feedsInscriptionBlock.appendChild(feedInscription);
-
+  const feedsListGenerate = (currentFeeds) => {
     const feedsList = document.createElement('ul');
     feedsList.classList.add('list-group', 'border-0', 'rounded-0');
-    feedsBlock.appendChild(feedsList);
 
     const feeds = currentFeeds.map((feed) => {
       const listElement = document.createElement('li');
@@ -84,29 +68,34 @@ export default (state, elements, i18n) => {
     });
     feedsList.append(...feeds);
 
+    return feedsList;
+  };
+
+  const handleFeeds = () => {
+    const { currentFeeds } = state;
+    const { feedsMain } = elements;
+
+    const feedsBlock = document.createElement('div');
+    feedsBlock.classList.add('card', 'border-0');
+
+    const feedsInscriptionBlock = document.createElement('div');
+    feedsInscriptionBlock.classList.add('card-body');
+    feedsBlock.appendChild(feedsInscriptionBlock);
+
+    const feedInscription = document.createElement('h2');
+    feedInscription.classList.add('card-title', 'h4');
+    feedInscription.textContent = i18n.t('feeds');
+    feedsInscriptionBlock.appendChild(feedInscription);
+
+    feedsBlock.appendChild(feedsListGenerate(currentFeeds));
+
     feedsMain.innerHTML = '';
     feedsMain.appendChild(feedsBlock);
   };
 
-  const handlePosts = () => {
-    const { posts, interfaceState } = state;
-    const { postsMain } = elements;
-
-    const postsBlock = document.createElement('div');
-    postsBlock.classList.add('card', 'border-0');
-
-    const postsInscriptionBlock = document.createElement('div');
-    postsInscriptionBlock.classList.add('card-body');
-    postsBlock.appendChild(postsInscriptionBlock);
-
-    const postsIncription = document.createElement('h2');
-    postsIncription.classList.add('card-title', 'h4');
-    postsIncription.textContent = i18n.t('posts');
-    postsInscriptionBlock.appendChild(postsIncription);
-
+  const postsListGenerate = (posts, interfaceState) => {
     const postsList = document.createElement('ul');
     postsList.classList.add('list-group', 'border-0', 'rounded-0');
-    postsBlock.appendChild(postsList);
 
     const everyPosts = posts.map((post) => {
       const listElement = document.createElement('li');
@@ -133,6 +122,27 @@ export default (state, elements, i18n) => {
       return listElement;
     });
     postsList.append(...everyPosts);
+
+    return postsList;
+  };
+
+  const handlePosts = () => {
+    const { posts, interfaceState } = state;
+    const { postsMain } = elements;
+
+    const postsBlock = document.createElement('div');
+    postsBlock.classList.add('card', 'border-0');
+
+    const postsInscriptionBlock = document.createElement('div');
+    postsInscriptionBlock.classList.add('card-body');
+    postsBlock.appendChild(postsInscriptionBlock);
+
+    const postsIncription = document.createElement('h2');
+    postsIncription.classList.add('card-title', 'h4');
+    postsIncription.textContent = i18n.t('posts');
+    postsInscriptionBlock.appendChild(postsIncription);
+
+    postsBlock.appendChild(postsListGenerate(posts, interfaceState));
 
     postsMain.innerHTML = '';
     postsMain.appendChild(postsBlock);

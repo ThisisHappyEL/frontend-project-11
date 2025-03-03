@@ -7,7 +7,7 @@
 
 # RSS Агрегатор
 
-[Ссылка на задеплоиный на netify агрегатор](https://rss-reader-bythisishappy.netlify.app/)
+[Ссылка на задеплоиный на netify.com агрегатор](https://rss-reader-bythisishappy.netlify.app/)
 
 ## Что это?
 
@@ -33,9 +33,9 @@ CI/CD:
 ## Установка и использование
 
 ```bash
-Клонирование репозитория локально - git clone git@github.com:nbagr/frontend-project-11.git
-Установка зависимостей - make install
-Запуск локального сервера - make develop
+git clone git@github.com:nbagr/frontend-project-11.git - Клонирование репозитория локально
+make install - Установка зависимостей
+make develop - Запуск локального сервера
 
 Далее вам остаётся лишь вставить любую ссылку, содержащую в себе RSS XML поток.
 В качестве примера можно скопировать ссылку ниже поля ввода для ознакомления с функционалом.
